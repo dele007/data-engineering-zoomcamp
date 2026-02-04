@@ -1,10 +1,10 @@
-# data-engineering-zoomcamp
+# Homework No. 2 Answers
 
-1. 
-2. 
+1. Unable to upload screenshot for proof
+2. Unable to upload screenshot for proof
 3. SELECT count(*) FROM `dtc-de-zoomcamp-485417.zoomcamp.yellow_tripdata` 
    WHERE extract(year from lpep_pickup_datetime) = 2020
 4. SELECT count(*) FROM `dtc-de-zoomcamp-485417.zoomcamp.green_tripdata` 
    WHERE extract(year from lpep_pickup_datetime) = 2020
-5.
+5. Unable to upload screenshot for proof
 6. Didn't remember this one from the videos so I went ahead and googled it.
