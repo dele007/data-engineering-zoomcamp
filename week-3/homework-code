@@ -1,0 +1,65 @@
+1. Looked at row total under storage info.
+# Query for external table:
+CREATE OR REPLACE EXTERNAL TABLE `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips-external`
+OPTIONS (
+  format = 'PARQUET',
+  uris = ['gs://de-zoomcamp-2026-aa/*.parquet']
+);
+
+# Query for materialized table:
+# I ended up using this method because the parquet file had an issue merging the format of 
+# each file's passenger_count column. The XX was replaced with the appropriate month.
+LOAD DATA OVERWRITE  `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`
+FROM FILES   (
+  format = 'PARQUET',
+  uris = ['gs://de-zoomcamp-2026-aa/yellow_tripdata_2024-01.parquet']);
+
+LOAD DATA INTO `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`
+FROM FILES (
+  format = 'PARQUET',
+  uris = ['gs://de-zoomcamp-2026-aa/yellow_tripdata_2024-XX.parquet']
+);
+
+2.
+select distinct PULocationID, count(*)
+from `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips-external`
+group by 1;
+
+select distinct PULocationID, count(*)
+from `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`
+group by 1;
+
+3. 
+select distinct PULocationID
+from `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`;
+
+select distinct PULocationID, DOLocationID
+from `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`;
+
+4.
+select count(vendorid) 
+from `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips-external`
+where fare_amount = 0;
+
+5.
+CREATE OR REPLACE TABLE `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips-partitioned-clustered`
+PARTITION BY DATE(tpep_dropoff_datetime )
+CLUSTER BY VendorID AS
+SELECT * FROM `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`;
+
+6.
+SELECT DISTINCT VendorID
+FROM `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`
+WHERE DATE(tpep_dropoff_datetime ) >= date(2024,3,1 ) AND  DATE(tpep_dropoff_datetime ) < date(2024,3,16 );
+
+SELECT DISTINCT VendorID
+FROM `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips-partitioned-clustered`
+WHERE DATE(tpep_dropoff_datetime ) >= date(2024,3,1 ) AND  DATE(tpep_dropoff_datetime ) < date(2024,3,16 );
+
+7.
+
+8.
+
+9.
+SELECT COUNT(*)
+FROM `dtc-de-zoomcamp-485417.zoomcamp.2024-yellow-trips`
